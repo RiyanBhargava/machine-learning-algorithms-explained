@@ -109,7 +109,7 @@ def generate() -> dict:
         files.write(DOCS / "assets/notebook-images" / path.name, path.read_bytes())
 
     for path in (ROOT / "docs").rglob("*"):
-        if path.is_file():
+        if path.is_file() and path.name != "maintaining.md":
             files.write(DOCS / path.relative_to(ROOT / "docs"), path.read_bytes())
 
     coverage = {}
@@ -230,7 +230,6 @@ Open the foundations notebook first. To execute examples, restart the kernel and
             *entries(algorithms[15:]),
         ]},
         {"Questions & revision": [{"Overview": "revision/index.md"}, *entries(revision)]},
-        {"Project guide": [{"Maintaining the documentation": "maintaining.md"}]},
     ]
     generated_config = yaml.safe_dump(config, sort_keys=False, allow_unicode=True)
     if not GENERATED_CONFIG.exists() or GENERATED_CONFIG.read_text(encoding="utf-8") != generated_config:
