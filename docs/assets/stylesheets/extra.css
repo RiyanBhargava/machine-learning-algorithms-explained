@@ -1,5 +1,5 @@
 :root {
-  --md-text-font: "Segoe UI", system-ui, -apple-system, sans-serif;
+  --md-text-font: "Google Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
   --md-code-font: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
 }
 [data-md-color-scheme="default"] {
