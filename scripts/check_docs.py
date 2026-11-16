@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from collections import Counter
 import json
+import re
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 import zipfile
@@ -17,6 +18,11 @@ def main():
     errors = []
     pages = {p.resolve(): BeautifulSoup(p.read_text(encoding="utf-8"), "html.parser") for p in SITE.rglob("*.html")}
     for path, soup in pages.items():
+        article = soup.select_one("article")
+        if article:
+            text = article.get_text(" ", strip=True)
+            if "\ufffd" in text or re.search(r"\d\?\d", text):
+                errors.append(f"{path.relative_to(SITE)} -> corrupted text encoding")
         for element in soup.select("a[href], img[src], script[src], link[href]"):
             href = element.get("href", element.get("src", ""))
             url = urlsplit(href)
