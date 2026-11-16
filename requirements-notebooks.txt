@@ -1,0 +1,7 @@
+# Separate from the documentation environment. Used to run the learning examples.
+numpy==2.4.2
+pandas==2.3.3
+matplotlib==3.10.8
+scikit-learn==1.8.0
+seaborn>=0.13,<0.14
+jupyterlab>=4,<5

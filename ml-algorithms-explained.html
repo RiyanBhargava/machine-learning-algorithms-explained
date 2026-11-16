@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Machine Learning Algorithms</title>
+  <style>
+:root {
+  --bg: #f5f1e8;
+  --panel: #fffdf8;
+  --panel-2: #f8f4ec;
+  --ink: #1f2430;
+  --muted: #5f6675;
+  --line: #ddd3c3;
+  --accent: #0f766e;
+  --accent-2: #b45309;
+  --code-bg: #1f2430;
+  --code-ink: #eef2f7;
+  --shadow: 0 18px 50px rgba(31, 36, 48, 0.08);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  background:
+    radial-gradient(circle at top left, rgba(15,118,110,0.08), transparent 28%),
+    radial-gradient(circle at top right, rgba(180,83,9,0.08), transparent 24%),
+    linear-gradient(180deg, #f8f4ec 0%, #f5f1e8 35%, #efe8db 100%);
+  color: var(--ink);
+  line-height: 1.75;
+}
+
+.page {
+  width: min(1120px, calc(100vw - 48px));
+  margin: 32px auto 64px;
+}
+
+.hero {
+  background: linear-gradient(145deg, rgba(255,253,248,0.96), rgba(248,244,236,0.96));
+  border: 1px solid rgba(221, 211, 195, 0.9);
+  border-radius: 28px;
+  padding: 40px 44px 34px;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: auto -40px -55px auto;
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(15,118,110,0.16), transparent 68%);
+  pointer-events: none;
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: clamp(2.4rem, 5vw, 4.1rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+.hero p {
+  margin: 16px 0 0;
+  max-width: 760px;
+  color: var(--muted);
+  font-size: 1.08rem;
+}
+
+.topbar {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin: 18px 0 0;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(15,118,110,0.08);
+  border: 1px solid rgba(15,118,110,0.18);
+  font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+  font-size: 0.92rem;
+  color: #104b46;
+}
+
+.content {
+  margin-top: 26px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 18px;
+}
+
+.cell {
+  background: rgba(255,253,248,0.92);
+  border: 1px solid rgba(221, 211, 195, 0.9);
+  border-radius: 22px;
+  padding: 26px 30px;
+  box-shadow: var(--shadow);
+}
+
+.cell.markdown { padding-top: 22px; }
+.cell.code { background: linear-gradient(180deg, rgba(255,252,245,0.96), rgba(250,246,239,0.96)); }
+
+.cell h1, .cell h2, .cell h3, .cell h4 {
+  margin-top: 0;
+  color: #18202a;
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+}
+
+.cell h1 {
+  font-size: 2.1rem;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(221, 211, 195, 0.85);
+}
+
+.cell h2 {
+  font-size: 1.62rem;
+  margin-bottom: 14px;
+}
+
+.cell h3 {
+  font-size: 1.16rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+}
+
+.cell p, .cell li, .cell blockquote {
+  font-size: 1.03rem;
+}
+
+.cell p { margin: 0 0 14px; }
+.cell ul, .cell ol { margin: 8px 0 16px 22px; padding: 0; }
+.cell li + li { margin-top: 8px; }
+
+.cell hr {
+  border: 0;
+  border-top: 1px solid rgba(221, 211, 195, 0.85);
+  margin: 22px 0;
+}
+
+.cell a {
+  color: #0f5f94;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(15,95,148,0.2);
+}
+
+.cell a:hover { border-bottom-color: rgba(15,95,148,0.75); }
+
+.cell strong { color: #18202a; }
+.cell em { color: #5c4323; }
+
+.inline-code {
+  font-family: Consolas, "Courier New", monospace;
+  background: #f1e8d8;
+  border: 1px solid #e2d5bc;
+  border-radius: 7px;
+  padding: 0.1rem 0.35rem;
+  font-size: 0.92em;
+}
+
+.code-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+}
+
+.code-label {
+  font-size: 0.84rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.code-note {
+  font-size: 0.88rem;
+  color: #7a6040;
+}
+
+pre {
+  margin: 0;
+  overflow-x: auto;
+  border-radius: 18px;
+  padding: 20px 22px;
+  background: linear-gradient(180deg, #202733, #171c25);
+  color: var(--code-ink);
+  border: 1px solid rgba(16, 22, 31, 0.55);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+
+pre code {
+  font-family: Consolas, "SFMono-Regular", "Courier New", monospace;
+  font-size: 0.92rem;
+  line-height: 1.7;
+  white-space: pre;
+}
+
+blockquote {
+  margin: 18px 0;
+  padding: 10px 0 10px 18px;
+  border-left: 3px solid rgba(15,118,110,0.35);
+  color: #4c5564;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 14px 0 18px;
+  font-size: 0.96rem;
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+thead th {
+  background: #efe7d8;
+  color: #30261a;
+  font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+  text-align: left;
+}
+
+th, td {
+  border: 1px solid rgba(221, 211, 195, 0.8);
+  padding: 10px 12px;
+  vertical-align: top;
+}
+
+tbody tr:nth-child(even) { background: rgba(248, 244, 236, 0.78); }
+
+.image-wrap {
+  margin: 18px 0 10px;
+}
+
+.image-wrap img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 18px;
+  border: 1px solid rgba(221, 211, 195, 0.92);
+  box-shadow: 0 14px 35px rgba(31, 36, 48, 0.08);
+  background: white;
+}
+
+.section-anchor {
+  color: inherit;
+  text-decoration: none;
+}
+
+.footer {
+  margin: 26px 0 0;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+@media (max-width: 840px) {
+  .page { width: min(100vw - 24px, 1120px); margin-top: 12px; }
+  .hero { padding: 28px 22px 24px; border-radius: 22px; }
+  .cell { padding: 22px 18px; border-radius: 18px; }
+  .hero h1 { font-size: clamp(2rem, 10vw, 3rem); }
+  .cell h1 { font-size: 1.72rem; }
+  .cell h2 { font-size: 1.42rem; }
+}
+</style>
+</head>
+<body>
+  <main class="page">
+    <div class="content">
+
+<section class="hero">
+  <p class="eyebrow">Notebook Presentation</p>
+  <h1>Machine Learning Algorithms: Complete Practical Notebook</h1>
+  <p>This notebook teaches core machine learning algorithms in a clear, step-by-step flow. For each algorithm, you will see: 1. The raw dataset 2. The train/test split 3. The model training step 4. The prediction step 5. The evaluation step That makes it easier to understand exactly what data is being used and when.</p>
+  <div class="topbar">
+    <span class="pill">Same notebook content</span>
+    <span class="pill">Custom HTML presentation</span>
+    <span class="pill">Professional learning layout</span>
+  </div>
+</section>
+<section class="cell markdown"><h3 id="what-is-machine-learning"><a class="section-anchor" href="#what-is-machine-learning">What Is Machine Learning</a></h3>
+<div class="image-wrap"><img src="WhatIsML.png" alt="What Is Machine Learning"></div>
+<p><em>A high-level view of how data is turned into a model that can make useful predictions or decisions.</em></p></section><section class="cell markdown"><h3 id="types-of-machine-learning"><a class="section-anchor" href="#types-of-machine-learning">Types Of Machine Learning</a></h3>
+<div class="image-wrap"><img src="TypesOfML.png" alt="Types Of Machine Learning"></div>
+<p><em>This summary helps separate supervised, unsupervised, semi-supervised, and reinforcement learning before diving into the algorithms.</em></p></section><section class="cell markdown"><h3 id="end-to-end-ml-workflow"><a class="section-anchor" href="#end-to-end-ml-workflow">End-To-End ML Workflow</a></h3>
+<div class="image-wrap"><img src="EndToEndMLWorlkflow.png" alt="End-To-End ML Workflow"></div>
+<p><em>A practical roadmap for how machine learning projects usually move from raw data to evaluation and improvement.</em></p></section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code># Run this cell once if needed.
+%pip install numpy pandas matplotlib seaborn scikit-learn -q</code></pre>
+</section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code>import warnings
+warnings.filterwarnings(&quot;ignore&quot;)
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from IPython.display import display
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
+from sklearn.metrics import (
+    mean_absolute_error,
+    mean_squared_error,
+    r2_score,
+    accuracy_score,
+    confusion_matrix,
+    classification_report,
+    roc_auc_score,
+    silhouette_score,
+)
+
+sns.set_theme(style=&quot;whitegrid&quot;, context=&quot;notebook&quot;)
+plt.rcParams[&quot;figure.figsize&quot;] = (8, 5)
+plt.rcParams[&quot;axes.titlesize&quot;] = 14
+plt.rcParams[&quot;axes.labelsize&quot;] = 11
+pd.set_option(&quot;display.max_columns&quot;, 100)
+
+RANDOM_STATE = 42</code></pre>
+</section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code>def print_section(title):
+    print(&quot;\n&quot; + &quot;=&quot; * 90)
+    print(title)
+    print(&quot;=&quot; * 90)
+
+
+def show_raw_dataset(name, df):
+    print_section(f&quot;{name} - Raw Dataset Preview&quot;)
+    print(&quot;First 10 rows of the dataset:&quot;)
+    display(df.head(10))
+    print(&quot;Dataset shape:&quot;, df.shape)
+
+
+def show_split(name, X_train, X_test, y_train=None, y_test=None):
+    print_section(f&quot;{name} - Train/Test Split&quot;)
+    print(&quot;X_train shape:&quot;, X_train.shape)
+    print(&quot;X_test shape :&quot;, X_test.shape)
+    if y_train is not None and y_test is not None:
+        print(&quot;y_train shape:&quot;, y_train.shape)
+        print(&quot;y_test shape :&quot;, y_test.shape)
+
+
+def evaluate_regression(y_true, y_pred):
+    rmse = mean_squared_error(y_true, y_pred) ** 0.5
+    print(f&quot;MAE  : {mean_absolute_error(y_true, y_pred):.4f}&quot;)
+    print(f&quot;RMSE : {rmse:.4f}&quot;)
+    print(f&quot;R^2  : {r2_score(y_true, y_pred):.4f}&quot;)
+
+
+def evaluate_classification(y_true, y_pred, y_proba=None):
+    print(f&quot;Accuracy: {accuracy_score(y_true, y_pred):.4f}&quot;)
+    print(&quot;\nConfusion Matrix:&quot;)
+    print(confusion_matrix(y_true, y_pred))
+    print(&quot;\nClassification Report:&quot;)
+    print(classification_report(y_true, y_pred))
+    if y_proba is not None:
+        try:
+            print(f&quot;ROC-AUC: {roc_auc_score(y_true, y_proba):.4f}&quot;)
+        except Exception:
+            pass
+
+
+def show_prediction_table(actual, predicted, probabilities=None, n=10):
+    table = pd.DataFrame({
+        &quot;Actual&quot;: actual[:n],
+        &quot;Predicted&quot;: predicted[:n]
+    })
+    if probabilities is not None:
+        table[&quot;Predicted_Probability&quot;] = np.round(probabilities[:n], 4)
+    display(table)</code></pre>
+</section><section class="cell markdown"><h2 id="1-what-is-machine-learning"><a class="section-anchor" href="#1-what-is-machine-learning">1. What Is Machine Learning?</a></h2>
+<p>Machine Learning is a way of making systems learn patterns from data instead of manually hard-coding every rule.</p>
+<p>Main idea:</p>
+<ul>
+<li><code class="inline-code">X</code> means input features</li>
+<li><code class="inline-code">y</code> means output or target</li>
+<li>the model learns a relationship from <code class="inline-code">X</code> to <code class="inline-code">y</code></li>
+</ul></section><section class="cell markdown"><h2 id="2-types-of-machine-learning"><a class="section-anchor" href="#2-types-of-machine-learning">2. Types of Machine Learning</a></h2>
+<h3 id="supervised-learning"><a class="section-anchor" href="#supervised-learning">Supervised Learning</a></h3>
+<p>We have inputs <code class="inline-code">X</code> and correct answers <code class="inline-code">y</code>.</p>
+<p>Used for:</p>
+<ul>
+<li>regression</li>
+<li>classification</li>
+</ul>
+<h3 id="unsupervised-learning"><a class="section-anchor" href="#unsupervised-learning">Unsupervised Learning</a></h3>
+<p>We only have <code class="inline-code">X</code>, with no labels.</p>
+<p>Used for:</p>
+<ul>
+<li>clustering</li>
+<li>dimensionality reduction</li>
+</ul></section><section class="cell markdown"><h1 id="supervised-learning"><a class="section-anchor" href="#supervised-learning">Supervised Learning</a></h1></section><section class="cell markdown"><h3 id="train-test-split-concept"><a class="section-anchor" href="#train-test-split-concept">Train-Test Split Concept</a></h3>
+<div class="image-wrap"><img src="TrainTestSplitConcept.png" alt="Train-Test Split Concept"></div>
+<p><em>This is one of the most important ideas in the notebook: the model learns from training data and is judged on separate unseen test data.</em></p></section><section class="cell markdown"><h2 id="3-linear-regression"><a class="section-anchor" href="#3-linear-regression">3. Linear Regression</a></h2>
+<p>Linear Regression predicts a continuous value.</p>
+<p>Raw dataset used here:</p>
+<ul>
+<li>synthetic dataset created with <code class="inline-code">make_regression(...)</code></li>
+<li>features are numeric</li>
+<li>target is a continuous number</li>
+</ul></section><section class="cell markdown"><h3 id="linear-regression-concept"><a class="section-anchor" href="#linear-regression-concept">Linear Regression Concept</a></h3>
+<div class="image-wrap"><img src="LinearRegressionConcept.png" alt="Linear Regression Concept"></div>
+<p><em>Linear Regression tries to fit the best straight-line relationship between features and a continuous target.</em></p></section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code>from sklearn.datasets import make_regression
+from sklearn.linear_model import LinearRegression
+
+X_lr, y_lr = make_regression(
+    n_samples=250,
+    n_features=3,
+    n_informative=3,
+    noise=18,
+    random_state=RANDOM_STATE
+)
+
+lr_df = pd.DataFrame(X_lr, columns=[&quot;feature_1&quot;, &quot;feature_2&quot;, &quot;feature_3&quot;])
+lr_df[&quot;target&quot;] = y_lr
+show_raw_dataset(&quot;Linear Regression&quot;, lr_df)</code></pre>
+</section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code>X_train_lr, X_test_lr, y_train_lr, y_test_lr = train_test_split(
+    X_lr, y_lr, test_size=0.2, random_state=RANDOM_STATE
+)
+
+show_split(&quot;Linear Regression&quot;, X_train_lr, X_test_lr, y_train_lr, y_test_lr)</code></pre>
+</section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code>linear_model = LinearRegression()
+linear_model.fit(X_train_lr, y_train_lr)
+
+print_section(&quot;Linear Regression - Model Training&quot;)
+print(&quot;The model has been trained using X_train_lr and y_train_lr.&quot;)
+print(&quot;Coefficients:&quot;, linear_model.coef_)
+print(&quot;Intercept:&quot;, linear_model.intercept_)</code></pre>
+</section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code>y_pred_lr = linear_model.predict(X_test_lr)
+
+print_section(&quot;Linear Regression - Predictions and Evaluation&quot;)
+print(&quot;Predictions are being made on X_test_lr.&quot;)
+show_prediction_table(y_test_lr, y_pred_lr)
+evaluate_regression(y_test_lr, y_pred_lr)</code></pre>
+</section><section class="cell markdown"><h2 id="4-logistic-regression"><a class="section-anchor" href="#4-logistic-regression">4. Logistic Regression</a></h2>
+<p>Logistic Regression is a supervised classification algorithm.</p>
+<p>Raw dataset used here:</p>
+<ul>
+<li>synthetic dataset created with <code class="inline-code">make_classification(...)</code></li>
+<li>features are numeric</li>
+<li>target contains class labels like <code class="inline-code">0</code> and <code class="inline-code">1</code></li>
+</ul></section><section class="cell markdown"><h3 id="logistic-regression-concept"><a class="section-anchor" href="#logistic-regression-concept">Logistic Regression Concept</a></h3>
+<div class="image-wrap"><img src="LogisticRegressionConcept.png" alt="Logistic Regression Concept"></div>
+<p><em>Logistic Regression converts a linear score into a probability so it can make class predictions such as 0 or 1.</em></p></section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code>from sklearn.datasets import make_classification
+from sklearn.linear_model import LogisticRegression
+
+X_log, y_log = make_classification(
+    n_samples=400,
+    n_features=6,
+    n_informative=4,
+    n_redundant=1,
+    random_state=RANDOM_STATE, class_sep=1.2
+)
+
+log_df = pd.DataFrame(X_log, columns=[f&quot;feature_{i}&quot; for i in range(X_log.shape[1])])
+log_df[&quot;target&quot;] = y_log
+show_raw_dataset(&quot;Logistic Regression&quot;, log_df)</code></pre>
+</section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code>X_train_log, X_test_log, y_train_log, y_test_log = train_test_split(
+    X_log, y_log, test_size=0.25, random_state=RANDOM_STATE, stratify=y_log
+)
+
+show_split(&quot;Logistic Regression&quot;, X_train_log, X_test_log, y_train_log, y_test_log)</code></pre>
+</section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code>log_model = Pipeline([
+    (&quot;scaler&quot;, StandardScaler()),
+    (&quot;model&quot;, LogisticRegression(max_iter=1000))
+])
+log_model.fit(X_train_log, y_train_log)
+
+print_section(&quot;Logistic Regression - Model Training&quot;)
+print(&quot;The model has been trained using the training dataset.&quot;)</code></pre>
+</section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code>y_pred_log = log_model.predict(X_test_log)
+y_proba_log = log_model.predict_proba(X_test_log)[:, 1]
+
+print_section(&quot;Logistic Regression - Predictions and Evaluation&quot;)
+print(&quot;Predictions are being made on X_test_log.&quot;)
+show_prediction_table(y_test_log, y_pred_log, y_proba_log)
+evaluate_classification(y_test_log, y_pred_log, y_proba_log)</code></pre>
+</section><section class="cell markdown"><h2 id="5-k-nearest-neighbors-knn"><a class="section-anchor" href="#5-k-nearest-neighbors-knn">5. K-Nearest Neighbors (KNN)</a></h2>
+<p>K-Nearest Neighbors (KNN) is a supervised classification algorithm.</p>
+<p>Raw dataset used here:</p>
+<ul>
+<li>synthetic dataset created with <code class="inline-code">make_classification(...)</code></li>
+<li>features are numeric</li>
+<li>target contains class labels like <code class="inline-code">0</code> and <code class="inline-code">1</code></li>
+</ul></section><section class="cell markdown"><h3 id="knn-concept"><a class="section-anchor" href="#knn-concept">KNN Concept</a></h3>
+<div class="image-wrap"><img src="KNNConcept.png" alt="KNN Concept"></div>
+<p><em>KNN predicts by looking at the closest training points and using their labels as evidence.</em></p></section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code>from sklearn.datasets import make_classification
+from sklearn.neighbors import KNeighborsClassifier
+
+X_knn, y_knn = make_classification(
+    n_samples=350,
+    n_features=5,
+    n_informative=3,
+    n_redundant=0,
+    random_state=RANDOM_STATE, class_sep=1.0
+)
+
+knn_df = pd.DataFrame(X_knn, columns=[f&quot;feature_{i}&quot; for i in range(X_knn.shape[1])])
+knn_df[&quot;target&quot;] = y_knn
+show_raw_dataset(&quot;K-Nearest Neighbors (KNN)&quot;, knn_df)</code></pre>
+</section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code>X_train_knn, X_test_knn, y_train_knn, y_test_knn = train_test_split(
+    X_knn, y_knn, test_size=0.25, random_state=RANDOM_STATE, stratify=y_knn
+)
+
+show_split(&quot;K-Nearest Neighbors (KNN)&quot;, X_train_knn, X_test_knn, y_train_knn, y_test_knn)</code></pre>
+</section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code>knn_model = Pipeline([
+    (&quot;scaler&quot;, StandardScaler()),
+    (&quot;model&quot;, KNeighborsClassifier(n_neighbors=5))
+])
+knn_model.fit(X_train_knn, y_train_knn)
+
+print_section(&quot;K-Nearest Neighbors (KNN) - Model Training&quot;)
+print(&quot;The model has been trained using the training dataset.&quot;)</code></pre>
+</section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code>y_pred_knn = knn_model.predict(X_test_knn)
+y_proba_knn = None
+
+print_section(&quot;K-Nearest Neighbors (KNN) - Predictions and Evaluation&quot;)
+print(&quot;Predictions are being made on X_test_knn.&quot;)
+show_prediction_table(y_test_knn, y_pred_knn)
+evaluate_classification(y_test_knn, y_pred_knn)</code></pre>
+</section><section class="cell markdown"><h2 id="6-support-vector-machine-svm"><a class="section-anchor" href="#6-support-vector-machine-svm">6. Support Vector Machine (SVM)</a></h2>
+<p>Support Vector Machine (SVM) is a supervised classification algorithm.</p>
+<p>Raw dataset used here:</p>
+<ul>
+<li>synthetic dataset created with <code class="inline-code">make_classification(...)</code></li>
+<li>features are numeric</li>
+<li>target contains class labels like <code class="inline-code">0</code> and <code class="inline-code">1</code></li>
+</ul></section><section class="cell markdown"><h3 id="svm-concept"><a class="section-anchor" href="#svm-concept">SVM Concept</a></h3>
+<div class="image-wrap"><img src="SVMConcept.png" alt="SVM Concept"></div>
+<p><em>SVM looks for the boundary that separates classes with the largest possible margin.</em></p></section><section class="cell markdown"><h3 id="kernel-trick"><a class="section-anchor" href="#kernel-trick">Kernel Trick</a></h3>
+<div class="image-wrap"><img src="KernelTrick.png" alt="Kernel Trick"></div>
+<p><em>When data is not linearly separable in the original space, kernels help map it into a space where separation becomes easier.</em></p></section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code>from sklearn.datasets import make_classification
+from sklearn.svm import SVC
+
+X_svm, y_svm = make_classification(
+    n_samples=450,
+    n_features=8,
+    n_informative=5,
+    n_redundant=1,
+    random_state=RANDOM_STATE, class_sep=1.3
+)
+
+svm_df = pd.DataFrame(X_svm, columns=[f&quot;feature_{i}&quot; for i in range(X_svm.shape[1])])
+svm_df[&quot;target&quot;] = y_svm
+show_raw_dataset(&quot;Support Vector Machine (SVM)&quot;, svm_df)</code></pre>
+</section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code>X_train_svm, X_test_svm, y_train_svm, y_test_svm = train_test_split(
+    X_svm, y_svm, test_size=0.25, random_state=RANDOM_STATE, stratify=y_svm
+)
+
+show_split(&quot;Support Vector Machine (SVM)&quot;, X_train_svm, X_test_svm, y_train_svm, y_test_svm)</code></pre>
+</section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code>svm_model = Pipeline([
+    (&quot;scaler&quot;, StandardScaler()),
+    (&quot;model&quot;, SVC(kernel=&quot;rbf&quot;, probability=True, C=1.0, gamma=&quot;scale&quot;))
+])
+svm_model.fit(X_train_svm, y_train_svm)
+
+print_section(&quot;Support Vector Machine (SVM) - Model Training&quot;)
+print(&quot;The model has been trained using the training dataset.&quot;)</code></pre>
+</section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code>y_pred_svm = svm_model.predict(X_test_svm)
+y_proba_svm = svm_model.predict_proba(X_test_svm)[:, 1]
+
+print_section(&quot;Support Vector Machine (SVM) - Predictions and Evaluation&quot;)
+print(&quot;Predictions are being made on X_test_svm.&quot;)
+show_prediction_table(y_test_svm, y_pred_svm, y_proba_svm)
+evaluate_classification(y_test_svm, y_pred_svm, y_proba_svm)</code></pre>
+</section><section class="cell markdown"><h2 id="7-naive-bayes-classifier"><a class="section-anchor" href="#7-naive-bayes-classifier">7. Naive Bayes Classifier</a></h2>
+<p>Naive Bayes Classifier is a supervised classification algorithm.</p>
+<p>Raw dataset used here:</p>
+<ul>
+<li>synthetic dataset created with <code class="inline-code">make_classification(...)</code></li>
+<li>features are numeric</li>
+<li>target contains class labels like <code class="inline-code">0</code> and <code class="inline-code">1</code></li>
+</ul></section><section class="cell markdown"><h3 id="naive-bayes-concept"><a class="section-anchor" href="#naive-bayes-concept">Naive Bayes Concept</a></h3>
+<div class="image-wrap"><img src="NaiveBayesConcept.png" alt="Naive Bayes Concept"></div>
+<p><em>Naive Bayes uses probability and Bayes' theorem to estimate which class is most likely for a given input.</em></p></section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code>from sklearn.datasets import make_classification
+from sklearn.naive_bayes import GaussianNB
+
+X_nb, y_nb = make_classification(
+    n_samples=350,
+    n_features=6,
+    n_informative=4,
+    n_redundant=0,
+    random_state=RANDOM_STATE
+)
+
+nb_df = pd.DataFrame(X_nb, columns=[f&quot;feature_{i}&quot; for i in range(X_nb.shape[1])])
+nb_df[&quot;target&quot;] = y_nb
+show_raw_dataset(&quot;Naive Bayes Classifier&quot;, nb_df)</code></pre>
+</section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code>X_train_nb, X_test_nb, y_train_nb, y_test_nb = train_test_split(
+    X_nb, y_nb, test_size=0.25, random_state=RANDOM_STATE, stratify=y_nb
+)
+
+show_split(&quot;Naive Bayes Classifier&quot;, X_train_nb, X_test_nb, y_train_nb, y_test_nb)</code></pre>
+</section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code>nb_model = GaussianNB()
+nb_model.fit(X_train_nb, y_train_nb)
+
+print_section(&quot;Naive Bayes Classifier - Model Training&quot;)
+print(&quot;The model has been trained using the training dataset.&quot;)</code></pre>
+</section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code>y_pred_nb = nb_model.predict(X_test_nb)
+y_proba_nb = nb_model.predict_proba(X_test_nb)[:, 1]
+
+print_section(&quot;Naive Bayes Classifier - Predictions and Evaluation&quot;)
+print(&quot;Predictions are being made on X_test_nb.&quot;)
+show_prediction_table(y_test_nb, y_pred_nb, y_proba_nb)
+evaluate_classification(y_test_nb, y_pred_nb, y_proba_nb)</code></pre>
+</section><section class="cell markdown"><h2 id="8-decision-tree"><a class="section-anchor" href="#8-decision-tree">8. Decision Tree</a></h2>
+<p>Decision Tree is a supervised classification algorithm.</p>
+<p>Raw dataset used here:</p>
+<ul>
+<li>synthetic dataset created with <code class="inline-code">make_classification(...)</code></li>
+<li>features are numeric</li>
+<li>target contains class labels like <code class="inline-code">0</code> and <code class="inline-code">1</code></li>
+</ul></section><section class="cell markdown"><h3 id="decision-tree-concept"><a class="section-anchor" href="#decision-tree-concept">Decision Tree Concept</a></h3>
+<div class="image-wrap"><img src="DecisionTreeConcept.png" alt="Decision Tree Concept"></div>
+<p><em>Decision Trees split the data with a sequence of feature-based questions until a prediction is reached.</em></p></section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code>from sklearn.datasets import make_classification
+from sklearn.tree import DecisionTreeClassifier
+
+X_tree, y_tree = make_classification(
+    n_samples=400,
+    n_features=7,
+    n_informative=4,
+    n_redundant=1,
+    random_state=RANDOM_STATE
+)
+
+tree_df = pd.DataFrame(X_tree, columns=[f&quot;feature_{i}&quot; for i in range(X_tree.shape[1])])
+tree_df[&quot;target&quot;] = y_tree
+show_raw_dataset(&quot;Decision Tree&quot;, tree_df)</code></pre>
+</section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code>X_train_tree, X_test_tree, y_train_tree, y_test_tree = train_test_split(
+    X_tree, y_tree, test_size=0.25, random_state=RANDOM_STATE, stratify=y_tree
+)
+
+show_split(&quot;Decision Tree&quot;, X_train_tree, X_test_tree, y_train_tree, y_test_tree)</code></pre>
+</section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code>tree_model = DecisionTreeClassifier(max_depth=4, random_state=RANDOM_STATE)
+tree_model.fit(X_train_tree, y_train_tree)
+
+print_section(&quot;Decision Tree - Model Training&quot;)
+print(&quot;The model has been trained using the training dataset.&quot;)</code></pre>
+</section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code>y_pred_tree = tree_model.predict(X_test_tree)
+y_proba_tree = None
+
+print_section(&quot;Decision Tree - Predictions and Evaluation&quot;)
+print(&quot;Predictions are being made on X_test_tree.&quot;)
+show_prediction_table(y_test_tree, y_pred_tree)
+evaluate_classification(y_test_tree, y_pred_tree)</code></pre>
+</section><section class="cell markdown"><h2 id="9-bagging-and-random-forest"><a class="section-anchor" href="#9-bagging-and-random-forest">9. Bagging and Random Forest</a></h2>
+<p>These are ensemble methods built from multiple decision trees.</p>
+<p>Raw dataset used here:</p>
+<ul>
+<li>synthetic dataset created with <code class="inline-code">make_classification(...)</code></li>
+</ul></section><section class="cell markdown"><h3 id="bagging-concept"><a class="section-anchor" href="#bagging-concept">Bagging Concept</a></h3>
+<div class="image-wrap"><img src="BaggingConcept.png" alt="Bagging Concept"></div>
+<p><em>Bagging builds multiple models on bootstrapped samples and then combines them to reduce variance.</em></p></section><section class="cell markdown"><h3 id="random-forest-concept"><a class="section-anchor" href="#random-forest-concept">Random Forest Concept</a></h3>
+<div class="image-wrap"><img src="RandomForestConcept.png" alt="Random Forest Concept"></div>
+<p><em>Random Forest improves on a single tree by using many trees plus random feature selection at each split.</em></p></section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code>from sklearn.datasets import make_classification
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import BaggingClassifier, RandomForestClassifier
+
+X_rf, y_rf = make_classification(
+    n_samples=500,
+    n_features=10,
+    n_informative=6,
+    n_redundant=2,
+    random_state=RANDOM_STATE
+)
+
+rf_df = pd.DataFrame(X_rf, columns=[f&quot;feature_{i}&quot; for i in range(X_rf.shape[1])])
+rf_df[&quot;target&quot;] = y_rf
+show_raw_dataset(&quot;Bagging and Random Forest&quot;, rf_df)</code></pre>
+</section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code>X_train_rf, X_test_rf, y_train_rf, y_test_rf = train_test_split(
+    X_rf, y_rf, test_size=0.25, random_state=RANDOM_STATE, stratify=y_rf
+)
+
+show_split(&quot;Bagging and Random Forest&quot;, X_train_rf, X_test_rf, y_train_rf, y_test_rf)</code></pre>
+</section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code>bagging_model = BaggingClassifier(
+    estimator=DecisionTreeClassifier(max_depth=4, random_state=RANDOM_STATE),
+    n_estimators=50,
+    random_state=RANDOM_STATE
+)
+
+rf_model = RandomForestClassifier(
+    n_estimators=200,
+    max_depth=6,
+    random_state=RANDOM_STATE
+)
+
+bagging_model.fit(X_train_rf, y_train_rf)
+rf_model.fit(X_train_rf, y_train_rf)
+
+print_section(&quot;Bagging and Random Forest - Model Training&quot;)
+print(&quot;Both ensemble models have been trained on the training dataset.&quot;)</code></pre>
+</section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code>y_pred_bag = bagging_model.predict(X_test_rf)
+y_pred_rf = rf_model.predict(X_test_rf)
+
+print_section(&quot;Bagging - Predictions and Evaluation&quot;)
+show_prediction_table(y_test_rf, y_pred_bag)
+evaluate_classification(y_test_rf, y_pred_bag)
+
+print_section(&quot;Random Forest - Predictions and Evaluation&quot;)
+show_prediction_table(y_test_rf, y_pred_rf)
+evaluate_classification(y_test_rf, y_pred_rf)</code></pre>
+</section><section class="cell markdown"><h2 id="10-boosting-and-strong-learners"><a class="section-anchor" href="#10-boosting-and-strong-learners">10. Boosting and Strong Learners</a></h2>
+<p>Boosting trains multiple learners sequentially so each one improves previous mistakes.</p></section><section class="cell markdown"><h3 id="boosting-concept"><a class="section-anchor" href="#boosting-concept">Boosting Concept</a></h3>
+<div class="image-wrap"><img src="BoostingConcept.png" alt="Boosting Concept"></div>
+<p><em>Boosting trains learners one after another so later models focus more on earlier mistakes.</em></p></section><section class="cell markdown"><h3 id="weak-learner-vs-strong-learner"><a class="section-anchor" href="#weak-learner-vs-strong-learner">Weak Learner Vs Strong Learner</a></h3>
+<div class="image-wrap"><img src="WeakLearnerVSStrongLearner.png" alt="Weak Learner Vs Strong Learner"></div>
+<p><em>This comparison shows how many modest models can be combined into a much stronger overall learner.</em></p></section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code>from sklearn.datasets import make_classification
+from sklearn.ensemble import AdaBoostClassifier, GradientBoostingClassifier
+
+X_boost, y_boost = make_classification(
+    n_samples=500,
+    n_features=10,
+    n_informative=6,
+    n_redundant=1,
+    class_sep=1.1,
+    random_state=RANDOM_STATE
+)
+
+boost_df = pd.DataFrame(X_boost, columns=[f&quot;feature_{i}&quot; for i in range(X_boost.shape[1])])
+boost_df[&quot;target&quot;] = y_boost
+show_raw_dataset(&quot;Boosting&quot;, boost_df)</code></pre>
+</section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code>X_train_boost, X_test_boost, y_train_boost, y_test_boost = train_test_split(
+    X_boost, y_boost, test_size=0.25, random_state=RANDOM_STATE, stratify=y_boost
+)
+
+show_split(&quot;Boosting&quot;, X_train_boost, X_test_boost, y_train_boost, y_test_boost)</code></pre>
+</section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code>ada_model = AdaBoostClassifier(n_estimators=100, random_state=RANDOM_STATE)
+gb_model = GradientBoostingClassifier(random_state=RANDOM_STATE)
+
+ada_model.fit(X_train_boost, y_train_boost)
+gb_model.fit(X_train_boost, y_train_boost)
+
+print_section(&quot;Boosting - Model Training&quot;)
+print(&quot;AdaBoost and Gradient Boosting have been trained on the training dataset.&quot;)</code></pre>
+</section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code>y_pred_ada = ada_model.predict(X_test_boost)
+y_pred_gb = gb_model.predict(X_test_boost)
+
+print_section(&quot;AdaBoost - Predictions and Evaluation&quot;)
+show_prediction_table(y_test_boost, y_pred_ada)
+evaluate_classification(y_test_boost, y_pred_ada)
+
+print_section(&quot;Gradient Boosting - Predictions and Evaluation&quot;)
+show_prediction_table(y_test_boost, y_pred_gb)
+evaluate_classification(y_test_boost, y_pred_gb)</code></pre>
+</section><section class="cell markdown"><h2 id="11-neural-networks-deep-learning"><a class="section-anchor" href="#11-neural-networks-deep-learning">11. Neural Networks / Deep Learning</a></h2>
+<p>Neural networks learn layered non-linear patterns from data.</p></section><section class="cell markdown"><h3 id="neural-network-concept"><a class="section-anchor" href="#neural-network-concept">Neural Network Concept</a></h3>
+<div class="image-wrap"><img src="NeuralNetworkConcept.png" alt="Neural Network Concept"></div>
+<p><em>A neural network learns layered transformations from inputs to outputs through connected artificial neurons.</em></p></section><section class="cell markdown"><h3 id="deep-learning-intuition"><a class="section-anchor" href="#deep-learning-intuition">Deep Learning Intuition</a></h3>
+<div class="image-wrap"><img src="DeepLearningIntuition.png" alt="Deep Learning Intuition"></div>
+<p><em>Deep models learn increasingly abstract patterns as information moves through the hidden layers.</em></p></section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code>from sklearn.datasets import make_classification
+from sklearn.neural_network import MLPClassifier
+
+X_nn, y_nn = make_classification(
+    n_samples=600,
+    n_features=12,
+    n_informative=8,
+    n_redundant=2,
+    random_state=RANDOM_STATE
+)
+
+nn_df = pd.DataFrame(X_nn, columns=[f&quot;feature_{i}&quot; for i in range(X_nn.shape[1])])
+nn_df[&quot;target&quot;] = y_nn
+show_raw_dataset(&quot;Neural Network&quot;, nn_df)</code></pre>
+</section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code>X_train_nn, X_test_nn, y_train_nn, y_test_nn = train_test_split(
+    X_nn, y_nn, test_size=0.25, random_state=RANDOM_STATE, stratify=y_nn
+)
+
+show_split(&quot;Neural Network&quot;, X_train_nn, X_test_nn, y_train_nn, y_test_nn)</code></pre>
+</section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code>nn_model = Pipeline([
+    (&quot;scaler&quot;, StandardScaler()),
+    (&quot;model&quot;, MLPClassifier(hidden_layer_sizes=(32, 16), max_iter=1200, random_state=RANDOM_STATE))
+])
+
+nn_model.fit(X_train_nn, y_train_nn)
+
+print_section(&quot;Neural Network - Model Training&quot;)
+print(&quot;The neural network has been trained on the training dataset.&quot;)</code></pre>
+</section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code>y_pred_nn = nn_model.predict(X_test_nn)
+y_proba_nn = nn_model.predict_proba(X_test_nn)[:, 1]
+
+print_section(&quot;Neural Network - Predictions and Evaluation&quot;)
+show_prediction_table(y_test_nn, y_pred_nn, y_proba_nn)
+evaluate_classification(y_test_nn, y_pred_nn, y_proba_nn)</code></pre>
+</section><section class="cell markdown"><h1 id="unsupervised-learning"><a class="section-anchor" href="#unsupervised-learning">Unsupervised Learning</a></h1></section><section class="cell markdown"><h2 id="12-k-means-clustering"><a class="section-anchor" href="#12-k-means-clustering">12. K-Means Clustering</a></h2>
+<p>K-Means groups similar points into clusters.</p>
+<p>Raw dataset used here:</p>
+<ul>
+<li>synthetic clustering dataset created with <code class="inline-code">make_blobs(...)</code></li>
+</ul></section><section class="cell markdown"><h3 id="k-means-clustering-concept"><a class="section-anchor" href="#k-means-clustering-concept">K-Means Clustering Concept</a></h3>
+<div class="image-wrap"><img src="KMeansClusteringConcept.png" alt="K-Means Clustering Concept"></div>
+<p><em>K-Means repeatedly assigns points to the nearest centroid and updates those centroids until clusters stabilize.</em></p></section><section class="cell markdown"><h3 id="elbow-method-concept"><a class="section-anchor" href="#elbow-method-concept">Elbow Method Concept</a></h3>
+<div class="image-wrap"><img src="ElbowMethodConcept.png" alt="Elbow Method Concept"></div>
+<p><em>The elbow method helps choose a reasonable number of clusters by looking for diminishing returns in inertia.</em></p></section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code>from sklearn.datasets import make_blobs
+from sklearn.cluster import KMeans
+
+X_kmeans, y_kmeans_true = make_blobs(
+    n_samples=400,
+    centers=4,
+    cluster_std=1.0,
+    random_state=RANDOM_STATE
+)
+
+kmeans_df = pd.DataFrame(X_kmeans, columns=[&quot;feature_1&quot;, &quot;feature_2&quot;])
+kmeans_df[&quot;reference_cluster&quot;] = y_kmeans_true
+show_raw_dataset(&quot;K-Means&quot;, kmeans_df)</code></pre>
+</section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code>kmeans_model = KMeans(n_clusters=4, random_state=RANDOM_STATE, n_init=10)
+cluster_labels = kmeans_model.fit_predict(X_kmeans)
+
+print_section(&quot;K-Means - Model Fitting and Cluster Prediction&quot;)
+print(&quot;K-Means was fitted on X_kmeans and predicted cluster labels.&quot;)
+display(pd.DataFrame({
+    &quot;feature_1&quot;: X_kmeans[:10, 0],
+    &quot;feature_2&quot;: X_kmeans[:10, 1],
+    &quot;reference_cluster&quot;: y_kmeans_true[:10],
+    &quot;predicted_cluster&quot;: cluster_labels[:10]
+}))
+print(&quot;Silhouette Score:&quot;, round(silhouette_score(X_kmeans, cluster_labels), 4))</code></pre>
+</section><section class="cell markdown"><h2 id="13-dimensionality-reduction"><a class="section-anchor" href="#13-dimensionality-reduction">13. Dimensionality Reduction</a></h2>
+<p>Dimensionality reduction reduces the number of features while preserving useful information.</p>
+<p>The most important starting method is PCA.</p></section><section class="cell markdown"><h3 id="dimensionality-reduction-concept"><a class="section-anchor" href="#dimensionality-reduction-concept">Dimensionality Reduction Concept</a></h3>
+<div class="image-wrap"><img src="DimensionalityReductionConcept.png" alt="Dimensionality Reduction Concept"></div>
+<p><em>Dimensionality reduction compresses many features into fewer informative directions while trying to preserve structure.</em></p></section><section class="cell markdown"><h2 id="14-pca"><a class="section-anchor" href="#14-pca">14. PCA</a></h2>
+<p>PCA transforms many original features into fewer principal components.</p>
+<p>Raw dataset used here:</p>
+<ul>
+<li>real built-in dataset from scikit-learn: <code class="inline-code">load_wine()</code></li>
+</ul></section><section class="cell markdown"><h3 id="pca-concept"><a class="section-anchor" href="#pca-concept">PCA Concept</a></h3>
+<div class="image-wrap"><img src="PCAConcept.png" alt="PCA Concept"></div>
+<p><em>PCA finds new orthogonal axes that capture the greatest variance in the data.</em></p></section><section class="cell markdown"><h3 id="pca-transformation-intuition"><a class="section-anchor" href="#pca-transformation-intuition">PCA Transformation Intuition</a></h3>
+<div class="image-wrap"><img src="PCATransformationIntuition.png" alt="PCA Transformation Intuition"></div>
+<p><em>This visual helps explain how the original coordinate system is rotated into principal components.</em></p></section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code>from sklearn.datasets import load_wine
+from sklearn.decomposition import PCA
+
+wine = load_wine()
+X_pca = wine.data
+y_pca = wine.target
+
+wine_df = pd.DataFrame(X_pca, columns=wine.feature_names)
+wine_df[&quot;target_class&quot;] = y_pca
+show_raw_dataset(&quot;PCA - Wine Dataset&quot;, wine_df)</code></pre>
+</section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code>scaler = StandardScaler()
+X_pca_scaled = scaler.fit_transform(X_pca)
+
+print_section(&quot;PCA - Data Preparation&quot;)
+print(&quot;The data is scaled before PCA because PCA is sensitive to feature scale.&quot;)
+print(&quot;Scaled shape:&quot;, X_pca_scaled.shape)</code></pre>
+</section><section class="cell code">
+<div class="code-header">
+  <div class="code-label">Code Cell</div>
+  <div class="code-note">Source preserved from the notebook</div>
+</div>
+<pre><code>pca = PCA(n_components=2, random_state=RANDOM_STATE)
+X_pca_2d = pca.fit_transform(X_pca_scaled)
+
+print_section(&quot;PCA - Transformation Output&quot;)
+print(&quot;PCA fitted on the scaled dataset and transformed it into 2 components.&quot;)
+print(&quot;Original shape:&quot;, X_pca.shape)
+print(&quot;Reduced shape :&quot;, X_pca_2d.shape)
+print(&quot;Explained variance ratio:&quot;, np.round(pca.explained_variance_ratio_, 4))
+display(pd.DataFrame(X_pca_2d[:10], columns=[&quot;PC1&quot;, &quot;PC2&quot;]).assign(target_class=y_pca[:10]))</code></pre>
+</section><section class="cell markdown"><h2 id="15-final-notes"><a class="section-anchor" href="#15-final-notes">15. Final Notes</a></h2>
+<p>You should now be able to clearly see:</p>
+<ul>
+<li>where each raw dataset comes from</li>
+<li>what the rows look like before training</li>
+<li>how the train/test split is created</li>
+<li>what data is used for fitting</li>
+<li>what data is used for prediction</li>
+</ul>
+<p>Important:</p>
+<ul>
+<li><code class="inline-code">X_train</code>, <code class="inline-code">y_train</code> are used for training</li>
+<li><code class="inline-code">X_test</code> is used for prediction</li>
+<li><code class="inline-code">y_test</code> is used to compare predictions with the true answer</li>
+</ul></section><section class="cell markdown"><h3 id="algorithm-selection-guide"><a class="section-anchor" href="#algorithm-selection-guide">Algorithm Selection Guide</a></h3>
+<div class="image-wrap"><img src="AlgorithmSelectionGuide.png" alt="Algorithm Selection Guide"></div>
+<p><em>Use this as a quick mental map for choosing a suitable algorithm family based on the type of problem.</em></p></section>
+    </div>
+    <p class="footer">Generated from <code class="inline-code">ml-algorithms-explained.ipynb</code> without modifying the notebook source.</p>
+  </main>
+</body>
+</html>

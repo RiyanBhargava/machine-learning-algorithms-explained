@@ -1,0 +1,6 @@
+# Documentation only. Model-training dependencies are not needed to build the site.
+zensical==0.1.1
+nbconvert==7.17.1
+nbformat==5.10.4
+beautifulsoup4==4.14.3
+PyYAML==6.0.3

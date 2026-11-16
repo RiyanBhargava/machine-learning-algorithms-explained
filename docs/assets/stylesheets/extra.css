@@ -1,0 +1,43 @@
+:root {
+  --md-text-font: "Segoe UI", system-ui, -apple-system, sans-serif;
+  --md-code-font: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+}
+[data-md-color-scheme="default"] {
+  --md-primary-fg-color: #0f766e;
+  --md-accent-fg-color: #0f766e;
+  --md-default-bg-color: #fcfcfa;
+}
+[data-md-color-scheme="slate"] {
+  --md-primary-fg-color: #115e59;
+  --md-accent-fg-color: #5eead4;
+}
+.md-grid { max-width: 1480px; }
+.md-typeset { font-size: .82rem; line-height: 1.75; }
+.md-typeset h1 { font-weight: 750; letter-spacing: -.035em; color: var(--md-default-fg-color); }
+.md-typeset h2 { font-weight: 650; letter-spacing: -.02em; }
+.md-typeset h3 { font-weight: 650; }
+.md-typeset pre { font-size: .72rem; }
+.md-typeset img { max-height: 760px; object-fit: contain; border-radius: 10px; }
+.md-typeset table:not([class]) { font-size: .74rem; }
+.md-typeset .dataframe { display: block; overflow-x: auto; border-collapse: collapse; font-size: .7rem; }
+.md-typeset .dataframe th, .md-typeset .dataframe td { padding: .45em .7em; border-bottom: 1px solid var(--md-default-fg-color--lightest); white-space: nowrap; }
+.md-typeset .dataframe th { text-align: right; }
+.md-typeset .arithmatex { overflow-x: auto; }
+.md-typeset .arithmatex > svg { max-width: 100%; }
+.md-typeset .notebook-origin { margin: -1rem 0 1.5rem; font-size: .7rem; color: var(--md-default-fg-color--light); }
+.md-typeset .hero-label { color: var(--md-accent-fg-color); font-size: .68rem; font-weight: 750; text-transform: uppercase; letter-spacing: .15em; }
+.md-typeset .hero-lead { font-size: 1.1rem; max-width: 42rem; line-height: 1.6; }
+.md-typeset .learning-path { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin: 2rem 0; }
+.md-typeset .path-card { padding: 1.35rem; border: 1px solid var(--md-default-fg-color--lightest); border-top: 3px solid var(--md-accent-fg-color); border-radius: 10px; }
+.md-typeset .path-card h2 { margin: .45rem 0; font-size: 1.1rem; }
+.md-typeset .path-card p { font-size: .78rem; }
+.md-typeset .path-number { color: var(--md-accent-fg-color); font-size: .65rem; font-weight: 750; letter-spacing: .1em; }
+@media (max-width: 800px) {
+  .md-typeset .learning-path { grid-template-columns: 1fr; }
+  .md-typeset .hero-lead { font-size: .95rem; }
+}
+@media print {
+  .md-header, .md-tabs, .md-sidebar, .md-footer, .md-top { display: none; }
+  .md-content { margin: 0; }
+  .md-typeset pre, .md-typeset img { break-inside: avoid; }
+}
